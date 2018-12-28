@@ -9,6 +9,7 @@ Example Usage:
 Author: Eric Jang
 """
 
+#Touch only hyperparameters and Run training
 import tensorflow as tf
 from tensorflow.examples.tutorials import mnist
 import numpy as np
@@ -30,9 +31,9 @@ img_size = B*A # the canvas size
 enc_size = 256 # number of hidden units / output size in LSTM
 dec_size = 256
 
-read_n = 50 # read glimpse grid width/height
+read_n = 50 # read glimpse grid width/height, originally 5
 write_n = 50 # write glimpse grid width/height
-T = 30 #Generation sequence length
+T = 30 #Generation sequence length, originally 10
 z_size=10 # QSampler output size
 batch_size=100 # training minibatch size
 train_iters=200
@@ -44,6 +45,7 @@ read_size = 2*read_n*read_n if FLAGS.read_attn else 2*img_size
 write_size = write_n*write_n if FLAGS.write_attn else img_size
 
 def next_batch(data,batch_size):
+        #Creates a random batch of size batch_size from the array data
         indexes = np.random.choice(len(data),batch_size,replace = False)
         return [data[i] for i in indexes]
 
@@ -215,6 +217,7 @@ for i,(g,v) in enumerate(grads):
 train_op=optimizer.apply_gradients(grads)
 
 
+
 ## RUN TRAINING ## 
 '''
 data_directory = os.path.join(FLAGS.data_dir, "mnist")
@@ -223,7 +226,7 @@ if not os.path.exists(data_directory):
 train_data = mnist.input_data.read_data_sets(data_directory, one_hot=True).train # binarized (0-1) mnist data
 '''
 train_data = np.load('images_256_flatten.npy')
-train_data = [train_data[i*65536:(i+1)*65536] for i in range(1000)]
+train_data = [train_data[i*65536:(i+1)*65536] for i in range(1000)] #Delete once flattened correctly
 
 #Add data to fetch
 fetches=[]
