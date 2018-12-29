@@ -31,13 +31,13 @@ img_size = B*A # the canvas size
 enc_size = 256 # number of hidden units / output size in LSTM
 dec_size = 256
 
-read_n = 50 # read glimpse grid width/height, originally 5
-write_n = 50 # write glimpse grid width/height
-T = 30 #Generation sequence length, originally 10
-z_size=10 # QSampler output size
-batch_size=100 # training minibatch size
-train_iters=200
-learning_rate=1e-3 # learning rate for optimizer
+read_n = 30 # read glimpse grid width/height, originally 5
+write_n = 30 # write glimpse grid width/height
+T = 15 #Generation sequence length, originally 10
+z_size=15 # QSampler output size
+batch_size=144 # training minibatch size, must be a square for output
+train_iters=3000
+learning_rate=1e-4 # learning rate for optimizern originally 1e-3
 eps=1e-8 # epsilon for numerical stability
 
 #Write/read sizes
@@ -226,7 +226,7 @@ if not os.path.exists(data_directory):
 train_data = mnist.input_data.read_data_sets(data_directory, one_hot=True).train # binarized (0-1) mnist data
 '''
 train_data = np.load('images_256_flatten.npy')
-train_data = [train_data[i*65536:(i+1)*65536] for i in range(1000)] #Delete once flattened correctly
+train_data = 255* [train_data[i*65536:(i+1)*65536] for i in range(1000)] #Delete once flattened correctly
 
 #Add data to fetch
 fetches=[]
@@ -245,7 +245,7 @@ for i in range(train_iters):
 	feed_dict={x:xtrain}
 	results=sess.run(fetches,feed_dict)
 	Lxs[i],Lzs[i],_=results
-	if i%100==0:
+	if i%50==0:
 		print("iter=%d : Lx: %f Lz: %f" % (i,Lxs[i],Lzs[i]))
 
 ## TRAINING FINISHED ## 
