@@ -37,7 +37,7 @@ T = 15 #Generation sequence length, originally 10
 z_size=15 # QSampler output size
 batch_size=144 # training minibatch size, must be a square for output
 train_iters=3000
-learning_rate=1e-4 # learning rate for optimizern originally 1e-3
+learning_rate=1e-3 # learning rate for optimizern originally 1e-3
 eps=1e-8 # epsilon for numerical stability
 
 #Write/read sizes
@@ -55,8 +55,8 @@ DO_SHARE=None # workaround for variable_scope(reuse=True)
 
 x = tf.placeholder(tf.float32,shape=(batch_size,img_size)) # input (batch_size * img_size)
 e=tf.random_normal((batch_size,z_size), mean=0, stddev=1) # Qsampler noise
-lstm_enc = tf.contrib.rnn.LSTMCell(enc_size, state_is_tuple=True) # encoder Op
-lstm_dec = tf.contrib.rnn.LSTMCell(dec_size, state_is_tuple=True) # decoder Op
+lstm_enc = tf.contrib.rnn.LSTMCell(enc_size, state_is_tuple=True,activation = tf.nn.softmax) # encoder Op
+lstm_dec = tf.contrib.rnn.LSTMCell(dec_size, state_is_tuple=True,activation = tf.nn.softmax) # decoder Op
 
 def linear(x,output_dim):
     """
