@@ -14,6 +14,7 @@ import tensorflow as tf
 from tensorflow.examples.tutorials import mnist
 import numpy as np
 import os
+import time
 
 tf.flags.DEFINE_string("data_dir", "", "")
 tf.flags.DEFINE_boolean("read_attn", True, "enable attention for reader")
@@ -33,11 +34,11 @@ dec_size = 256
 
 read_n = 30 # read glimpse grid width/height, originally 5
 write_n = 30 # write glimpse grid width/height
-T = 15 #Generation sequence length, originally 10
+T = 20 #Generation sequence length, originally 10
 z_size=20 # QSampler output size
-batch_size=144 # training minibatch size, must be a square for output
-train_iters=3000
-learning_rate=1e-4 # learning rate for optimizern originally 1e-3
+batch_size=100 # training minibatch size, must be a square for output
+train_iters=8000
+learning_rate=5e-5 # learning rate for optimizern originally 1e-3
 eps=1e-8 # epsilon for numerical stability
 
 #Write/read sizes
@@ -240,14 +241,15 @@ sess=tf.InteractiveSession()
 saver = tf.train.Saver() # saves variables learned during training
 tf.global_variables_initializer().run()
 #saver.restore(sess, "/tmp/draw/drawmodel.ckpt") # to restore from model, uncomment this line
-
+start_time = time.time()
 for i in range(train_iters):
 	xtrain = next_batch(train_data,batch_size) # xtrain is (batch_size x img_size) 
 	feed_dict={x:xtrain}
 	results=sess.run(fetches,feed_dict)
 	Lxs[i],Lzs[i],_=results
 	if i%50==0:
-		print("iter=%d : Lx: %f Lz: %f" % (i,Lxs[i],Lzs[i]))
+                iter_time = time.time()
+                print("iter=%d : Lx: %f Lz: %f time: %f" % (i,Lxs[i],Lzs[i], iter_time - start_time))
 
 ## TRAINING FINISHED ## 
 
