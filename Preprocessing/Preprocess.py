@@ -125,8 +125,8 @@ for draw_idx in range(2000):
             image[pixel[0]-1,pixel[1]-1]=1
     
         # The fruit of our labor
-        fig = plt.imshow(image, cmap='binary')
-        resize_image = cv2.resize(image, (128,128), interpolation=cv2.INTER_CUBIC)
+       # fig = plt.imshow(image, cmap='binary')
+        resize_image = cv2.resize(image, (128,128), interpolation=cv2.INTER_CUBIC).flatten('C')
 
         #resize_image = image
         image_collect.append(resize_image)
@@ -142,11 +142,10 @@ for draw_idx in range(2000):
          #   finding = 0
           #  image_labels.append(finding)
 
-test = np.array(image_collect).flatten('C')
+test = np.array(image_collect)
 #np.save("draw/images_256_flatten_airplane", test.reshape(-1))
 #np.save("draw/images_256_flatten_cat", test.reshape(-1))
 #np.savez("draw/images_labels", image_labels)
-#np.save("draw/images_128_flatten_cat_test", test)
+np.save("draw/images_128_flatten_cat_test", test)
 
-print(test.size)
-print(test.len)
+#print(len(test[0]))
