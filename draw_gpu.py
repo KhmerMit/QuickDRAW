@@ -37,7 +37,7 @@ write_n = 30 # write glimpse grid width/height
 T = 20 #Generation sequence length, originally 10
 z_size=20 # QSampler output size
 batch_size=100 # training minibatch size, must be a square for output
-train_iters=8000
+train_iters=12000
 learning_rate=5e-5 # learning rate for optimizern originally 1e-3
 eps=1e-8 # epsilon for numerical stability
 
@@ -228,7 +228,7 @@ if not os.path.exists(data_directory):
 train_data = mnist.input_data.read_data_sets(data_directory, one_hot=True).train # binarized (0-1) mnist data
 '''
 train_data = np.load('images_256_flatten.npy')
-train_data = 255* [train_data[i*65536:(i+1)*65536] for i in range(1000)] #Delete once flattened correctly
+train_data = [train_data[i*65536:(i+1)*65536] for i in range(1000)] #Delete once flattened correctly
 
 #Add data to fetch
 fetches=[]
